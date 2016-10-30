@@ -21,12 +21,6 @@ var blogSchema = new mongoose.Schema({
 
 var Blog = mongoose.model("Blog", blogSchema);
 
-// Blog.create({
-//     title: "Test Blog",
-//     image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-0.3.5&q=80&fm=jpg",
-//     body: "This is a test post"
-// })
-
 // Routes
 app.get("/blogs", function(req, res) {
     Blog.find({}, function(err, blogs) {
@@ -43,7 +37,8 @@ app.get("/blogs/new", function(req, res) {
 });
 
 app.post("/blogs", function(req, res) {
-   // create
+
+// create
    Blog.create(req.body.blog, function(err, newBlog) {
        if(err) {
            res.render("new");
@@ -88,7 +83,13 @@ app.put("/blogs/:id", function(req, res) {
 
 // Delete route
 app.delete("/blogs/:id", function(req, res){
-   res.send("DELETE"); 
+   Blog.findByIdAndRemove(req.params.id, function(err) {
+      if(err) {
+          res.redirect("/blogs");
+      } else {
+          res.redirect("/blogs")
+      }
+   });
 });
 
 app.get("/", function(req, res) {
